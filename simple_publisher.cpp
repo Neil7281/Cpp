@@ -8,7 +8,7 @@ using namespace std::chrono_literals;
 class SimplePublisher : public rclcpp :: Node
 {
     public: 
-    SimplePublisher : Node('simple_publisher'),counter_(0)
+    SimplePublisher() : Node('simple_publisher'),counter_(0)
     {
         pub_ = create_publisher<std_msgs::msg::String>("chatter", 10);
         timer_ = create_wall_timer(1s, std::bind(&SimplePublisher::timerCallback, this));
@@ -18,12 +18,12 @@ class SimplePublisher : public rclcpp :: Node
     
     private:
     unsigned int counter_;
-    rclcpp::Publisher<std_msgs::msg::String>::sharedPtr pub_;
+    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub_;
     rclcpp::TimerBase::SharedPtr timer_;
 
     void timerCallback(){
-        auto massage = std_msgs::msg::String;
-        massage.data = 'Hello Ros2 - counter: ' + to_string(counter_++);
+        auto massage = std_msgs::msg::String();
+        massage.data = "Hello Ros2 - counter: " + std::to_string(counter_++);
         pub_->publish(massage);
 
     }
