@@ -15,12 +15,20 @@ std::vector<int> findMajority(std::vector<int>& arr) {
                 }
             }
             if (count > flor){
-                ans.push_back(arr[i]);
+                if (ans.size()==0 || arr[i] != ans[0])
+                    ans.push_back(arr[i]);
+                }
+            if (ans.size() == 2){
+                if (ans[0]>ans[1]){
+                    std::swap(ans[0], ans[1]);
+                    break;
+                }
             }
+                
         }
-    return ans;
-        
-}
+        return ans;
+    }
+    
 
 int main(){
     std::vector<int> vec = {2, 2, 3, 1, 3, 2, 1, 1};
