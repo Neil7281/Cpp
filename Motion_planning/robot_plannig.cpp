@@ -4,7 +4,7 @@
 #include <cmath>
 
 struct Cell {
-    int x, y;
+    double x, y;
     bool operator==(const Cell& other) const {
         return x == other.x && y == other.y;
     }
@@ -12,17 +12,17 @@ struct Cell {
 
 class GridMap {
 public:
-    GridMap(int w, int h) : width(w), height(h), occ(h, std::vector<int>(w, 0)) {}
+    GridMap(double w, double h) : width(w), height(h), occ(h, std::vector<int>(w, 0)) {}
 
-    bool inBounds(int x, int y) const {
+    bool inBounds(double x, double y) const {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
-    bool isFree(int x, int y) const {
+    bool isFree(double x, double y) const {
         return inBounds(x, y) && occ[y][x] == 0;
     }
 
-    void setObstacle(int x, int y) {
+    void setObstacle(double x, double y) {
         if (inBounds(x, y)) occ[y][x] = 1;
     }
 
@@ -30,7 +30,7 @@ public:
     int H() const { return height; }
 
 private:
-    int width, height;
+    double width, height;
     std::vector<std::vector<int>> occ; // 0 free, 1 obstacle
 };
 
@@ -39,21 +39,33 @@ std::vector<Cell> getNeighbors4(const GridMap& map, const Cell& c) {
     std::vector<Cell> nbrs;
     // Hint: try (x+1,y), (x-1,y), (x,y+1), (x,y-1)
     // Only push if map.isFree(nx, ny)
-    int nx1 = c.x + 1;
-    int nx2 = c.x - 1;
-    int ny1 = c.y + 1;
-    int ny2 = c.y - 1;
+    double dx[4] = {0,0,1.00,-1.00};
+    double dy[4] = {1.00,-1.00,0,0};
 
-    Cell c1{nx1, ny1};Cell c2{nx1, ny2};Cell c3{nx2, ny2};Cell c4{nx2, ny1};
-    // std::vector<Cell> cells = {c1, c2, c3, c4};
-    nbrs = {c1,c2,c3,c4};
-    for (int i = 0; i < 4; i++){
-        if(!map.isFree(nbrs[i].x, nbrs[i].y)){
-            nbrs.erase(nbrs.begin()+i);
+    for (int i = 0; i<4; i++){
+        double nx = c.x + dx[i];
+        double ny = c.y + dy[i];
+        if(map.isFree(nx, ny)){
+            nbrs.push_back(Cell{nx, ny});
         }
     }
     return nbrs;
 }
+
+std::vector<Cell> getNeighbors8(const GridMap& map, const Cell& c){
+    std::vector<Cell> nbrs8;
+    double dx[8] = {0,0,1.00,-1.00,0,0,sqrt(2), -sqrt(2)};
+    double dy[8] = {1.00,-1.00,0,0,sqrt(2), -sqrt(2), 0,0};
+
+    for (int i = 0; i<8; i++){
+        double nx = c.x + dx[i];
+        double ny = c.y + dy[i];
+        if(map.isFree(nx,ny)){
+            nbrs8.push_back(Cell{nx,ny});
+        }
+    }
+    return nbrs8;
+} 
 
 int main() {
     GridMap map(10, 8);
@@ -64,12 +76,18 @@ int main() {
     Cell start{2, 4};
     Cell goal{8, 6};
 
+    std::vector<Cell> n1 = getNeighbors8(map, goal);
+
     std::cout << "Grid ready. Start=(" << start.x << "," << start.y << ") "
               << "Goal=(" << goal.x << "," << goal.y << ")\n";
 
     // Quick check: start/goal must be free
     std::cout << "Start free? " << map.isFree(start.x, start.y) << "\n";
     std::cout << "Goal free? " << map.isFree(goal.x, goal.y) << "\n";
+
+    for (auto val : n1){
+        std::cout<<val.x<<" ";
+    }
 
     return 0;
 }
