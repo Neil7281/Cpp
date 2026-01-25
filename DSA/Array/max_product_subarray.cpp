@@ -1,21 +1,27 @@
 #include<iostream>
 #include<vector>
+#include<algorithm>
 
-int maxSubarraySum(std::vector<int> &arr) {
-        int n = prices.size();
-    int min_price = prices[0];
-    int max_profit = 0;
-        
-    for (int i = 1; i < n; i++){
-        min_price = std::min(min_price, prices[i]);
-        max_profit = std::max(max_profit, prices[i] - min_price);
+int maxProductSubarray(std::vector<int> &arr) {
+    int n = arr.size();
+        int max_product = arr[0];
+        int curr_max = arr[0];
+        int curr_min = arr[0];
+        for(int i = 1; i<n; i++){
+            int temp = std::max({arr[i], curr_max*arr[i], curr_min*arr[i]});
+            
+            curr_min = std::min({arr[i], curr_max*arr[i], curr_min*arr[i]});
+            
+            curr_max = temp;
+            
+            max_product = std::max(max_product, curr_max);
+        }
+        return max_product;
     }
-    
-    return max_profit;
-}
 
-int main(){
-    std::vector<int> prices = {7, 1, 5, 3, 6, 4};
-    std::cout<<maximumProfit(prices);
-    return 0;
-}
+    int main(){
+
+        std::vector<int> vec = {2, 3, -8, 7, -1, 2, 3};
+        std::cout<<"maximum product subarray = " << maxProductSubarray(vec);
+
+    }
