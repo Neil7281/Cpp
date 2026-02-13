@@ -41,7 +41,8 @@ std::vector<std::pair<double,double>> pathGenerator2(std::pair<double, double> s
         }
 
         if (collide){
-            if ((std::hypot((goal.first - curr_point.first), (goal.second - (curr_point.second+4.00)))<(std::hypot((goal.first - curr_point.first), (goal.second - (curr_point.second+4.00)))))){
+            if ((std::hypot((goal.first - curr_point.first), (goal.second - (curr_point.second+4.00)))
+                            <(std::hypot((goal.first - curr_point.first), (goal.second - (curr_point.second-4.00)))))){
                 curr_point.second+=4.00;
             }else {
                 curr_point.second-=4.00;
@@ -72,7 +73,7 @@ int main(){
     std::pair<double, double> start = {0.00,0.00};
     std::pair<double, double> goal = {10.00,0.00};
 
-    std::vector<std::pair<double, double>> ob = {{5.00,0.00}, {8.00,-4.00}};
+    std::vector<std::pair<double, double>> ob = {{5.00,0.00}, {8.00,-4.00}, {9.00, 0.00}};
 
     std::vector<std::pair<double, double>> path = pathGenerator2(start, goal, ob, 10.00);
 
