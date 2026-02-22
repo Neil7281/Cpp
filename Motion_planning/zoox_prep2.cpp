@@ -56,6 +56,8 @@ std::vector<std::pair<double,double>> pathGenerator2(std::pair<double, double> s
             }
             if(!offset_collide){
                 path.push_back(curr_point);
+            }else{
+                path.push_back({});
             }
 
         }else {
